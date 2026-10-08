@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1c6439">
+  <meta name="description" content="Sushi Tokio em Itaquaquecetuba. Conheça o cardápio e faça seu pedido online.">
+  <title>Sushi Tokio — culinária japonesa</title>
+  <link rel="icon" href="assets/logo.png">
+
+  <style>
+    :root {
+      --cream: #f3f2ec;
+      --white: #fffef9;
+      --green: #1c6439;
+      --red: #e32c30;
+      --yellow: #f0cb48;
+      --ink: #151614;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 20px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+    img { display: block; max-width: 100%; }
+    p, h2, h3, a { overflow-wrap: break-word; }
+
+    a:focus-visible, button:focus-visible, .cards:focus-visible {
+      outline: 3px solid var(--yellow);
+      outline-offset: 5px;
+    }
+
+    .skip {
+      position: absolute;
+      top: -80px;
+      left: 12px;
+      z-index: 10;
+      padding: 12px;
+      background: var(--white);
+    }
+
+    .skip:focus { top: 12px; }
+
+    .demo {
+      padding: 8px 12px;
+      background: var(--green);
+      color: white;
+      text-align: center;
+      font-size: 8px;
+      letter-spacing: .7px;
+      line-height: 1.6;
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      line-height: 1.7;
+    }
+
+    h2 {
+      margin: 15px 0 24px;
+      font-weight: 800;
+      letter-spacing: -1.8px;
+      line-height: 1.04;
+    }
+
+    .hero {
+      padding: 0 5% 24px;
+      overflow: hidden;
+      container-type: inline-size;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin: 18px 0 8px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .hero-tags span {
+      border: 1px solid #bfc4b5;
+      border-radius: 30px;
+      background: var(--cream);
+      padding: 8px 9px;
+      font-size: clamp(8px, 2.3cqw, 11px);
+    }
+
+    .hero-stage {
+      position: relative;
+      isolation: isolate;
+      aspect-ratio: 1 / 1.12;
+      width: 100%;
+    }
+
+    .hero-word {
+      position: absolute;
+      inset: 5% 0 auto;
+      z-index: 0;
+      margin: 0;
+      font-size: 42cqw;
+      font-weight: 800;
+      line-height: .78;
+      letter-spacing: -.08em;
+      pointer-events: none;
+    }
+
+    .hero-word > span {
+      display: block;
+      margin-top: 8cqw;
+      color: var(--red);
+      text-align: left;
+    }
+
+    .hero-cutout {
+      position: absolute;
+      z-index: 1;
+      width: 102%;
+      max-width: none;
+      height: auto;
+      left: -1%;
+      top: 6%;
+      filter: drop-shadow(0 22px 12px #1c301c20);
+      pointer-events: none;
+    }
+
+    .hero-flower {
+      position: absolute;
+      right: 6%;
+      top: 0;
+      z-index: 0;
+      color: var(--yellow);
+      font-size: 16cqw;
+      line-height: 1;
+      transform: rotate(12deg);
+    }
+
+    .hero-sticker {
+      position: absolute;
+      right: 1%;
+      bottom: 2%;
+      z-index: 2;
+      padding: 8px 10px;
+      background: var(--yellow);
+      border: 1px solid var(--green);
+      border-radius: 10px;
+      font-size: clamp(9px, 2.8cqw, 12px);
+      line-height: 1.5;
+      letter-spacing: 1px;
+      transform: rotate(6deg);
+    }
+
+    .hero-bottom {
+      position: relative;
+      margin-top: 10px;
+      background: var(--white);
+      border-radius: 22px;
+      padding: 23px 20px;
+    }
+
+    .hero-bottom .eyebrow {
+      color: var(--green);
+      font-size: 8px;
+      letter-spacing: .8px;
+    }
+
+    .hero-bottom h2 {
+      font-size: clamp(26px, 7cqw, 34px);
+      line-height: 1.12;
+      margin: 13px 0;
+    }
+
+    .hero-bottom h2 em {
+      font-style: normal;
+      color: var(--red);
+    }
+
+    .hero-bottom p:not(.eyebrow) {
+      color: #666a60;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .menu-discover {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-top: 19px;
+      padding-top: 17px;
+      border-top: 1px solid #dadfd0;
+      min-height: 44px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .menu-discover span {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+    }
+
+    .hero-illustration {
+      display: block;
+      text-align: right;
+      color: #747969;
+      font-size: 9px;
+      margin-top: 10px;
+    }
+
+    .ribbon {
+      display: flex;
+      align-items: center;
+      gap: 35px;
+      padding: 18px 0;
+      background: var(--green);
+      color: white;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 10px;
+      letter-spacing: 3px;
+    }
+
+    .ribbon i {
+      font-size: 23px;
+      font-style: normal;
+      color: var(--yellow);
+    }
+
+    .menu-section { padding: 48px 5%; }
+
+    .section-top h2 {
+      font-size: clamp(38px, 10vw, 64px);
+    }
+
+    .section-top h2 em {
+      color: var(--red);
+      font-style: normal;
+    }
+
+    .section-top .eyebrow { color: var(--green); }
+
+    .section-top > p {
+      font-size: 13px;
+      color: #66675d;
+      line-height: 1.7;
+    }
+
+    .section-top small {
+      display: block;
+      font-size: 10px;
+      margin-top: 14px;
+      line-height: 1.65;
+    }
+
+    .filters {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      padding: 18px 0 21px;
+      overscroll-behavior-x: contain;
+    }
+
+    .filters button {
+      flex-shrink: 0;
+      border: 1px solid #d0cec3;
+      background: var(--white);
+      color: var(--ink);
+      border-radius: 10px;
+      padding: 12px 20px;
+      min-height: 44px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .filters button.active {
+      color: white;
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .carousel-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .carousel-top p {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .carousel-top p span {
+      display: block;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0;
+      color: #6c6d61;
+      margin-top: 4px;
+    }
+
+    .carousel-controls { display: flex; gap: 8px; }
+
+    .carousel-controls button {
+      width: 44px;
+      height: 44px;
+      border: 1px solid #bdbeb1;
+      border-radius: 12px;
+      background: var(--white);
+      color: var(--green);
+      font-size: 21px;
+    }
+
+    .carousel-controls button:disabled {
+      opacity: .3;
+      cursor: default;
+    }
+
+    .cards {
+      display: flex;
+      align-items: stretch;
+      gap: 16px;
+      width: 100%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 0 2px 22px;
+      overscroll-behavior-x: contain;
+      scrollbar-width: thin;
+      scrollbar-color: var(--green) #d0cec3;
+    }
+
+    .dish {
+      flex: 0 0 87%;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      scroll-snap-align: start;
+      box-shadow: 0 4px 0 #dfe3d7;
+      container-type: inline-size;
+    }
+
+    .dish[hidden] { display: none; }
+
+    .card-art {
+      position: relative;
+      flex-shrink: 0;
+      aspect-ratio: 1.3;
+      overflow: hidden;
+      background: var(--yellow);
+      isolation: isolate;
+    }
+
+    .art-word {
+      position: absolute;
+      z-index: -1;
+      left: 5%;
+      top: 7%;
+      color: #fff7d1;
+      font-size: 23cqw;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -.065em;
+    }
+
+    .card-art img {
+      position: absolute;
+      width: 96%;
+      max-width: none;
+      left: 6%;
+      top: 4%;
+      transform: rotate(-12deg);
+      filter: drop-shadow(0 12px 6px #0002);
+    }
+
+    .card-art small {
+      position: absolute;
+      left: 17px;
+      bottom: 12px;
+      font-size: 7px;
+      letter-spacing: 1px;
+      color: #544821;
+    }
+
+    .dish:nth-child(3n+2) .card-art { background: #256b43; }
+    .dish:nth-child(3n+2) .art-word { color: #a6d591; }
+    .dish:nth-child(3n+2) .card-art small { color: #eef5df; }
+    .dish:nth-child(3n) .card-art { background: var(--red); }
+    .dish:nth-child(3n) .art-word { color: #ffb09b; }
+    .dish:nth-child(3n) .card-art small { color: white; }
+
+    .art-number {
+      position: absolute;
+      left: 5%;
+      bottom: -8%;
+      font-size: 53cqw;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -.075em;
+      color: #fff5d8;
+    }
+
+    .art-flower {
+      position: absolute;
+      right: 5%;
+      top: 26%;
+      font-size: 28cqw;
+      line-height: 1;
+      color: #fff8d7;
+      transform: rotate(12deg);
+    }
+
+    .art-caption {
+      position: absolute;
+      right: 7%;
+      bottom: 9%;
+      font-size: clamp(9px, 3.4cqw, 12px);
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: 1px;
+      color: white;
+    }
+
+    .dish-info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 280px;
+      padding: 0 20px 5px;
+    }
+
+    .dish-info .dish-category {
+      color: var(--green);
+      font-size: 8px;
+      letter-spacing: 1.5px;
+      margin-top: 20px;
+    }
+
+    .dish-info h3 {
+      margin: 4px 0 10px;
+      font-size: clamp(22px, 7.7cqw, 28px);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -.6px;
+    }
+
+    .dish-description {
+      flex: 1;
+      font-size: 13px;
+      line-height: 1.65;
+      color: #67695e;
+      margin: 0 0 16px;
+    }
+
+    .dish-price {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 17px;
+    }
+
+    .dish-info > a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      min-height: 48px;
+      padding: 15px 19px;
+      margin-bottom: 15px;
+      background: var(--green);
+      color: white;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .dish-info > a span { color: var(--yellow); }
+
+    .menu-foot {
+      text-align: center;
+      color: #6c6d61;
+      font-size: 12px;
+      line-height: 2;
+      margin-top: 18px;
+    }
+
+    .menu-foot a {
+      display: block;
+      width: 100%;
+      max-width: 340px;
+      margin: 10px auto 0;
+      padding: 11px 20px;
+      background: var(--red);
+      color: white;
+      border-radius: 30px;
+      font-weight: 700;
+    }
+
+    .instagram-section {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      width: 90%;
+      margin: 0 auto;
+      padding: 40px 6%;
+      background: var(--green);
+      color: var(--white);
+      border-radius: 25px;
+      align-items: center;
+    }
+
+    .instagram-copy { min-width: 0; }
+    .instagram-copy .eyebrow { color: var(--yellow); }
+
+    .instagram-copy h2 {
+      font-size: clamp(38px, 8vw, 66px);
+      line-height: 1.02;
+    }
+
+    .instagram-copy h2 em {
+      color: var(--yellow);
+      font-style: normal;
+    }
+
+    .instagram-copy > p:not(.eyebrow) {
+      color: #e3ecd9;
+      max-width: 400px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .instagram-handle {
+      display: block;
+      font-size: clamp(12px, 3vw, 17px);
+      font-weight: 700;
+      margin: 24px 0 18px;
+      overflow-wrap: anywhere;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 48px;
+      padding: 18px 23px;
+      background: var(--red);
+      color: white;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .instagram-button {
+      display: flex;
+      max-width: 310px;
+      background: var(--yellow);
+      color: #173f28;
+    }
+
+    .instagram-poster {
+      display: block;
+      min-width: 0;
+      background: var(--white);
+      color: #173f28;
+      border-radius: 20px;
+      overflow: hidden;
+      transform: rotate(-2deg);
+    }
+
+    .instagram-poster-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .instagram-poster-top img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+    }
+
+    .instagram-poster-top > span {
+      flex: 1;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .instagram-poster-top small {
+      display: block;
+      margin-top: 5px;
+      font-size: 7px;
+      letter-spacing: 1px;
+    }
+
+    .instagram-poster-top svg { flex-shrink: 0; }
+
+    .instagram-poster-art {
+      position: relative;
+      aspect-ratio: 1.1;
+      background: var(--red);
+      overflow: hidden;
+    }
+
+    .instagram-poster-art > span {
+      position: absolute;
+      left: 6%;
+      top: 7%;
+      color: #ffb09b;
+      font-weight: 900;
+      line-height: .94;
+      font-size: clamp(34px, 9vw, 66px);
+      letter-spacing: -2px;
+    }
+
+    .instagram-poster-art img {
+      position: absolute;
+      width: 110%;
+      max-width: none;
+      left: 0;
+      top: 6%;
+      transform: rotate(-10deg);
+    }
+
+    .instagram-poster-art small {
+      position: absolute;
+      bottom: 10px;
+      left: 16px;
+      color: white;
+      font-size: 7px;
+      letter-spacing: 1px;
+    }
+
+    .instagram-poster-bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .contact {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 48px 5%;
+    }
+
+    .contact > div { min-width: 0; }
+
+    .contact h2 {
+      font-size: clamp(34px, 9vw, 54px);
+      font-weight: 500;
+      letter-spacing: -1.3px;
+    }
+
+    .contact h2 em {
+      color: var(--green);
+      font-family: Georgia, serif;
+      font-weight: 400;
+    }
+
+    .contact p:not(.eyebrow) {
+      max-width: 420px;
+      font-size: 14px;
+      line-height: 1.9;
+      color: #62685c;
+    }
+
+    .contact .button {
+      margin-top: 17px;
+      max-width: 100%;
+      font-size: 12px;
+      padding: 17px 20px;
+    }
+
+    .contact-details { align-self: center; }
+
+    .contact-details > div {
+      position: relative;
+      border-bottom: 1px solid #c9cebf;
+      padding: 16px 0 21px 29px;
+    }
+
+    .contact-details > div:last-child { border-bottom: 0; }
+
+    .contact-details span {
+      position: absolute;
+      left: 0;
+      top: 20px;
+      color: var(--red);
+      font-size: 10px;
+    }
+
+    .contact-details h3 {
+      font-size: 15px;
+      margin: 0 0 7px;
+    }
+
+    .contact-details p, .contact-details a {
+      font-size: 12px !important;
+      margin: 0;
+      line-height: 1.8;
+    }
+
+    footer {
+      display: flex;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 25px 5% 115px;
+      background: #ecefe4;
+      border-top: 1px solid #c9cebf;
+    }
+
+    footer img { width: 64px; height: 64px; object-fit: contain; }
+
+    footer p {
+      flex: 1 1 190px;
+      font-size: 10px;
+      line-height: 1.8;
+      color: #646c5c;
+      margin: 0;
+    }
+
+    footer > a:last-child {
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+      font-size: 11px;
+    }
+
+    .mobile-order {
+      position: fixed;
+      z-index: 5;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 11px 5% calc(11px + env(safe-area-inset-bottom));
+      background: #f3f2ecf5;
+      border-top: 1px solid #c9cebf;
+    }
+
+    .mobile-order a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 48px;
+      padding: 17px 20px;
+      border-radius: 30px;
+      background: var(--red);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    @media (min-width: 600px) {
+      .dish { flex-basis: calc((100% - 16px) / 2); }
+      .hero-stage { aspect-ratio: 1.25; }
+      .hero-word { font-size: 34cqw; inset: 3% 0 auto; }
+      .hero-word > span { margin-top: 5cqw; }
+      .hero-cutout { width: 80%; left: 13%; top: -3%; }
+      .hero-flower { font-size: 11cqw; }
+      .hero-bottom { display: flex; gap: 25px; align-items: flex-end; }
+      .menu-discover { flex: 0 0 190px; margin: 0 0 5px; }
+      .contact { grid-template-columns: 1fr 1fr; gap: 35px; }
+    }
+
+    @media (min-width: 700px) {
+      .instagram-section {
+        grid-template-columns: 1.1fr 1fr;
+        gap: 50px;
+        padding: 55px 6%;
+      }
+
+      .instagram-poster {
+        max-width: 420px;
+        width: 100%;
+        justify-self: center;
+      }
+
+      .instagram-poster-art > span {
+        font-size: clamp(34px, 5vw, 66px);
+      }
+    }
+
+    @media (min-width: 900px) {
+      .hero { padding: 0 5% 28px; }
+
+      .hero-tags {
+        margin: 0;
+        padding-top: 24px;
+        gap: 10px;
+      }
+
+      .hero-tags span { padding: 10px 16px; font-size: 11px; }
+
+      .hero-stage {
+        height: clamp(420px, 42vw, 590px);
+        aspect-ratio: auto;
+        margin-top: 18px;
+      }
+
+      .hero-word {
+        font-size: clamp(180px, 24cqw, 300px);
+        inset: 4% auto auto 0;
+        width: 100%;
+        line-height: .8;
+      }
+
+      .hero-word > span { margin-top: 3cqw; }
+
+      .hero-cutout {
+        width: 64%;
+        max-width: 740px;
+        left: auto;
+        right: 0;
+        top: -7%;
+      }
+
+      .hero-flower {
+        font-size: clamp(70px, 8cqw, 105px);
+        right: 27%;
+        top: 2%;
+      }
+
+      .hero-sticker {
+        right: 1%;
+        bottom: 4%;
+        font-size: 14px;
+        padding: 12px 16px;
+      }
+
+      .hero-bottom {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 36px;
+        align-items: center;
+        margin-top: 0;
+        padding: 28px 34px;
+      }
+
+      .hero-bottom h2 { font-size: clamp(30px, 3vw, 40px); }
+      .hero-bottom p:not(.eyebrow) { font-size: 15px; }
+      .hero-bottom .eyebrow { font-size: 10px; }
+
+      .menu-discover {
+        width: 240px;
+        margin: 0;
+        border-top: 0;
+        border-left: 1px solid #dadfd0;
+        padding: 18px 0 18px 28px;
+        font-size: 14px;
+      }
+
+      .menu-section { padding: 72px 5%; }
+
+      .section-top {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+        gap: 50px;
+        align-items: end;
+      }
+
+      .section-top h2 { font-size: clamp(52px, 5vw, 72px); }
+      .section-top > p { font-size: 15px; }
+
+      .filters { flex-wrap: wrap; overflow: visible; gap: 10px; }
+      .filters button { font-size: 12px; padding: 12px 22px; }
+
+      .carousel-top p { font-size: 10px; }
+      .carousel-top p span { display: inline; margin-left: 18px; font-size: 12px; }
+
+      .cards { gap: 22px; }
+      .dish { flex-basis: calc((100% - 44px) / 3); }
+      .dish-info { padding: 0 24px 8px; min-height: 300px; }
+      .dish-info h3 { font-size: clamp(22px, 2vw, 28px); }
+
+      .instagram-section {
+        width: 100%;
+        border-radius: 0;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+        padding: 70px 8%;
+        gap: 65px;
+      }
+
+      .instagram-copy h2 { font-size: clamp(48px, 5vw, 66px); }
+      .instagram-copy > p:not(.eyebrow) { font-size: 16px; }
+      .instagram-poster { max-width: 400px; }
+
+      .contact {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        padding: 75px 8%;
+        gap: 70px;
+      }
+
+      .contact h2 { font-size: clamp(44px, 4.5vw, 60px); }
+      .contact-details p, .contact-details a { font-size: 14px !important; }
+      .mobile-order { display: none; }
+
+      footer { padding: 28px 5%; align-items: center; }
+      footer p { font-size: 11px; flex: 1; }
+    }
+
+    @media (min-width: 1600px) {
+      .hero-stage { height: 590px; }
+    }
+
+    @media (hover: hover) {
+      .dish-info > a:hover { background: #154f2c; }
+      .button:hover, .menu-foot a:hover { background: #c52224; }
+      .instagram-button:hover { background: #ffe17d; }
+      .carousel-controls button:hover:not(:disabled) {
+        background: var(--green);
+        color: white;
+      }
+    }
+
+    @keyframes arrive {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-word { animation: arrive .75s ease-out both; }
+      .hero-cutout { animation: arrive .95s ease-out both; }
+      .hero-bottom { animation: arrive .7s .2s ease-out both; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip" href="#principal">Ir para o conteúdo</a>
+
+  <div class="demo">
+    DEMONSTRAÇÃO INDEPENDENTE • Cardápio real · Foto ilustrativa
+  </div>
+
+  <main id="principal">
+    <section class="hero" aria-label="Sushi Tokio, culinária japonesa">
+      <div class="hero-tags">
+        <span>À la carte</span>
+        <span>Delivery & retirada</span>
+        <span>Caiuby · Itaquaquecetuba</span>
+      </div>
+
+      <div class="hero-stage">
+        <h1 class="hero-word" aria-label="Tokio">TO<span>KIO</span></h1>
+        <span class="hero-flower" aria-hidden="true">✳</span>
+
+        <img
+          class="hero-cutout"
+          src="assets/hero-cutout.webp"
+          width="1254"
+          height="1254"
+          fetchpriority="high"
+          alt="Sushi de salmão com hashis e folhas verdes, imagem ilustrativa"
+        >
+
+        <span class="hero-sticker">
+          BRASIL<br><b>× JAPÃO</b>
+        </span>
+      </div>
+
+      <div class="hero-bottom">
+        <div>
+          <p class="eyebrow">JAPONÊS NO SABOR. BRASIL NA IDENTIDADE.</p>
+          <h2>Seu próximo sushi.<br>Seu momento <em>Tokio.</em></h2>
+          <p>Combos, pokes, temakis e muito mais.<br>Escolha o seu favorito e peça online.</p>
+        </div>
+
+        <a class="menu-discover" href="#cardapio">
+          Conhecer o cardápio <span aria-hidden="true">↓</span>
+        </a>
+      </div>
+
+      <small class="hero-illustration">Imagem ilustrativa</small>
+    </section>
+
+    <div class="ribbon" aria-hidden="true">
+      <span>SEU MOMENTO TOKIO</span><i>✳</i>
+      <span>BRASIL & JAPÃO</span><i>✳</i>
+      <span>À LA CARTE</span><i>✳</i>
+      <span>SEU MOMENTO TOKIO</span>
+    </div>
+
+    <section class="menu-section" id="cardapio">
+      <div class="section-top">
+        <div>
+          <p class="eyebrow">O CARDÁPIO · DO SEU JEITO</p>
+          <h2>Qual é o seu<br><em>Tokio de hoje?</em></h2>
+        </div>
+
+        <p>
+          Para dividir. Para matar a vontade. Para repetir.
+          Encontre o sabor que combina com você.
+          <small>
+            Preços consultados em 07/10/2026 no Zesto.
+            Confirme valores e disponibilidade ao pedir.
+          </small>
+        </p>
+      </div>
+
+      <div class="filters" role="group" aria-label="Filtrar pratos">
+        <button class="active" data-filter="all" aria-pressed="true">Todos</button>
+        <button data-filter="combo" aria-pressed="false">Combinados</button>
+        <button data-filter="sushi" aria-pressed="false">Sushi & sashimi</button>
+        <button data-filter="poke" aria-pressed="false">Pokes</button>
+        <button data-filter="temaki" aria-pressed="false">Temakis</button>
+        <button data-filter="quente" aria-pressed="false">Quentes</button>
+      </div>
+
+      <div class="carousel-top">
+        <p>
+          SEU FAVORITO ESTÁ POR AQUI
+          <span>Arraste e descubra →</span>
+        </p>
+
+        <div class="carousel-controls">
+          <button id="menu-prev" aria-label="Ver pratos anteriores" aria-controls="menu-carousel">←</button>
+          <button id="menu-next" aria-label="Ver próximos pratos" aria-controls="menu-carousel">→</button>
+        </div>
+      </div>
+
+      <div
+        class="cards"
+        id="menu-carousel"
+        tabindex="0"
+        role="region"
+        aria-label="Carrossel de pratos"
+      ></div>
+
+      <p class="menu-foot">
+        Quer ver todas as opções?
+        <a
+          href="https://pedido.zesto.menu/en-US/store/Sushi-Tokio/vosbcodbqsloiigzl"
+          target="_blank"
+          rel="noopener"
+        >Ver cardápio completo no Zesto ↗</a>
+      </p>
+
+      <noscript>
+        <p>
+          <a href="https://pedido.zesto.menu/en-US/store/Sushi-Tokio/vosbcodbqsloiigzl">
+            Acesse o cardápio completo para conhecer os pratos.
+          </a>
+        </p>
+      </noscript>
+    </section>
+
+    <section class="instagram-section" id="sobre" aria-labelledby="instagram-title">
+      <div class="instagram-copy">
+        <p class="eyebrow">SUSHI TOKIO NO INSTAGRAM</p>
+        <h2 id="instagram-title">Deu vontade?<br><em>Siga o Tokio.</em></h2>
+
+        <p>
+          Seu próximo favorito pode aparecer no feed.
+          Acompanhe nossos pratos, novidades e os momentos que dão água na boca.
+        </p>
+
+        <a
+          class="instagram-handle"
+          href="https://www.instagram.com/sushitokiocaiuby2025/"
+          target="_blank"
+          rel="noopener"
+        >@sushitokiocaiuby2025</a>
+
+        <a
+          class="button instagram-button"
+          href="https://www.instagram.com/sushitokiocaiuby2025/"
+          target="_blank"
+          rel="noopener"
+        >Seguir no Instagram <span aria-hidden="true">↗</span></a>
+      </div>
+
+      <a
+        class="instagram-poster"
+        href="https://www.instagram.com/sushitokiocaiuby2025/"
+        target="_blank"
+        rel="noopener"
+        aria-label="Conhecer o Instagram do Sushi Tokio"
+      >
+        <div class="instagram-poster-top">
+          <img src="assets/logo.png" width="44" height="44" alt="">
+          <span>SUSHI TOKIO<small>DO PRATO PARA O FEED.</small></span>
+
+          <svg
+            viewBox="0 0 24 24"
+            width="28"
+            height="28"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+
+        <div class="instagram-poster-art">
+          <span>SEGUIR.<br>SALVAR.<br>SABOREAR.</span>
+          <img
+            src="assets/hero-cutout.webp"
+            width="1254"
+            height="1254"
+            loading="lazy"
+            alt="Sushi de salmão com hashis, imagem ilustrativa"
+          >
+          <small>IMAGEM ILUSTRATIVA</small>
+        </div>
+
+        <div class="instagram-poster-bottom">
+          Vem para o nosso Instagram <span aria-hidden="true">↗</span>
+        </div>
+      </a>
+    </section>
+
+    <section class="contact" id="contato">
+      <div>
+        <p class="eyebrow">VAMOS COMBINAR?</p>
+        <h2>A fome não<br><em>espera amanhã.</em></h2>
+
+        <p>
+          Peça pelo cardápio online com opções de entrega e retirada.
+          Para dúvidas, converse com a equipe pelo WhatsApp.
+        </p>
+
+        <a
+          class="button"
+          href="https://wa.me/message/ZEKCNFPKA7IMJ1"
+          target="_blank"
+          rel="noopener"
+        >Conversar no WhatsApp ↗</a>
+      </div>
+
+      <div class="contact-details">
+        <div>
+          <span>01</span>
+          <h3>Pedidos e informações</h3>
+          <p>Atendimento pelo WhatsApp do perfil.</p>
+        </div>
+
+        <div>
+          <span>02</span>
+          <h3>Acompanhe o Tokio</h3>
+          <a
+            href="https://www.instagram.com/sushitokiocaiuby2025/"
+            target="_blank"
+            rel="noopener"
+          >@sushitokiocaiuby2025 ↗</a>
+        </div>
+
+        <div>
+          <span>03</span>
+          <h3>Em Itaquaquecetuba</h3>
+          <p>
+            Estrada dos Índios, 1179 — Jardim Amanda Caiubi<br>
+            Itaquaquecetuba – SP · CEP 08587-000
+          </p>
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=Estrada+dos+Indios+1179+Itaquaquecetuba"
+            target="_blank"
+            rel="noopener"
+          >Ver no mapa ↗</a>
+        </div>
+
+        <div>
+          <span>04</span>
+          <h3>Horário de funcionamento</h3>
+          <p>
+            Segunda: fechado<br>
+            Terça a quinta: 11h–16h e 18h–23h30<br>
+            Sexta a domingo: 11h–23h30
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a href="#" aria-label="Sushi Tokio, início">
+      <img src="assets/logo.png" width="64" height="64" alt="Sushi Tokio Caiuby">
+    </a>
+
+    <p>
+      Demonstração não oficial • Foto ilustrativa.<br>
+      Cardápio e informações consultados no Zesto em 07/10/2026.
+    </p>
+
+    <a href="#">Voltar ao topo ↑</a>
+  </footer>
+
+  <div class="mobile-order">
+    <a
+      href="https://pedido.zesto.menu/en-US/store/Sushi-Tokio/vosbcodbqsloiigzl"
+      target="_blank"
+      rel="noopener"
+    >Fazer pedido online <span aria-hidden="true">↗</span></a>
+  </div>
+
+  <script>
+    const menuUrl =
+      "https://pedido.zesto.menu/en-US/store/Sushi-Tokio/vosbcodbqsloiigzl";
+
+    const dishes = [
+      {
+        category: "combo",
+        label: "COMBOS",
+        word: "COMBO",
+        name: "Koma-Ki (20 peças)",
+        description:
+          "10 Uramaki Philadelphia, 10 Uramaki Philadelphia grelhado, 1 shoyu e 1 hashi.",
+        price: "43,90",
+        photo: true
+      },
+      {
+        category: "combo",
+        label: "COMBOS",
+        word: "COMBO",
+        name: "Combo Caiubi (28 peças)",
+        description:
+          "8 niguiris de salmão, 10 hossomakis de salmão, 10 hot rolls, 1 shoyu e 1 hashi.",
+        price: "69,90",
+        photo: true
+      },
+      {
+        category: "combo",
+        label: "COMBOS",
+        word: "COMBO",
+        name: "Combo Alpes (11 peças)",
+        description:
+          "1 temaki de salmão, 10 hot rolls, refrigerante em lata 350 ml, 1 shoyu e 1 hashi.",
+        price: "59,90",
+        photo: true
+      },
+      {
+        category: "poke",
+        label: "POKES",
+        word: "POKE",
+        name: "Poke Salmão",
+        description:
+          "Salmão em cubos, arroz japonês, crispy de couve, crispy da casa, sunomono e gergelim.",
+        price: "44,90",
+        caption: "MISTURE<br>SEU MOMENTO."
+      },
+      {
+        category: "sushi",
+        label: "SUSHI & SASHIMI",
+        word: "SUSHI",
+        name: "Salmão (10 fatias)",
+        description: "10 fatias de salmão.",
+        price: "32,90",
+        photo: true
+      },
+      {
+        category: "sushi",
+        label: "SUSHI & SASHIMI",
+        word: "SUSHI",
+        name: "Sushi Jhow",
+        description:
+          "10 bolinhos de arroz enrolados no salmão, cream cheese e cebolinha.",
+        price: "35,90",
+        photo: true
+      },
+      {
+        category: "temaki",
+        label: "TEMAKIS",
+        word: "TEMAKI",
+        name: "Salmão Completo",
+        description:
+          "Temaki de salmão com cream cheese e cebolinha.",
+        price: "25,90",
+        caption: "APROVEITE<br>SEU MOMENTO."
+      },
+      {
+        category: "quente",
+        label: "HOT ROLL",
+        word: "QUENTE",
+        name: "Hot Roll de Kani",
+        description:
+          "10 hot rolls empanados com kani, cream cheese e cebolinha.",
+        price: "29,90",
+        caption: "EXPERIMENTE<br>SEU MOMENTO."
+      },
+      {
+        category: "quente",
+        label: "YAKISSOBA",
+        word: "QUENTE",
+        name: "Frango (Grande — 750g)",
+        description:
+          "Macarrão, legumes, frango e molho de soja. Categoria Yakissoba.",
+        price: "36,90",
+        caption: "EXPERIMENTE<br>SEU MOMENTO."
+      }
+    ];
+
+    const carousel = document.getElementById("menu-carousel");
+    const previousButton = document.getElementById("menu-prev");
+    const nextButton = document.getElementById("menu-next");
+    const reducedMotion =
+      window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    carousel.innerHTML = dishes.map((dish, index) => {
+      const number = String(index + 1).padStart(2, "0");
+
+      const artwork = dish.photo
+        ? `
+          <img
+            src="assets/hero-cutout.webp"
+            width="1254"
+            height="1254"
+            loading="lazy"
+            alt=""
+          >
+          <small>IMAGEM ILUSTRATIVA</small>
+        `
+        : `
+          <span class="art-number">${number}</span>
+          <span class="art-flower">✳</span>
+          <span class="art-caption">${dish.caption}</span>
+        `;
+
+      return `
+        <article class="dish" data-category="${dish.category}">
+          <div class="card-art" aria-hidden="true">
+            <span class="art-word">${dish.word}</span>
+            ${artwork}
+          </div>
+
+          <div class="dish-info">
+            <p class="dish-category">${number} / ${dish.label}</p>
+            <h3>${dish.name}</h3>
+            <p class="dish-description">${dish.description}</p>
+            <strong class="dish-price">R$ ${dish.price}</strong>
+            <a href="${menuUrl}" target="_blank" rel="noopener">
+              Quero esse <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    function updateControls() {
+      const maximum = carousel.scrollWidth - carousel.clientWidth;
+      previousButton.disabled = carousel.scrollLeft <= 2;
+      nextButton.disabled = carousel.scrollLeft >= maximum - 2;
+    }
+
+    function moveCarousel(direction) {
+      const card = carousel.querySelector(".dish:not([hidden])");
+      if (!card) return;
+
+      const gap = parseFloat(getComputedStyle(carousel).gap) || 16;
+
+      carousel.scrollBy({
+        left: direction * (card.getBoundingClientRect().width + gap),
+        behavior: reducedMotion.matches ? "auto" : "smooth"
+      });
+    }
+
+    previousButton.addEventListener("click", () => moveCarousel(-1));
+    nextButton.addEventListener("click", () => moveCarousel(1));
+    carousel.addEventListener("scroll", updateControls, { passive: true });
+
+    carousel.addEventListener("keydown", event => {
+      if (event.target !== carousel) return;
+
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        event.preventDefault();
+        moveCarousel(event.key === "ArrowLeft" ? -1 : 1);
+      }
+    });
+
+    document.querySelectorAll("[data-filter]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("[data-filter]").forEach(item => {
+          const active = item === button;
+          item.classList.toggle("active", active);
+          item.setAttribute("aria-pressed", String(active));
+        });
+
+        carousel.querySelectorAll(".dish").forEach(card => {
+          card.hidden =
+            button.dataset.filter !== "all" &&
+            card.dataset.category !== button.dataset.filter;
+        });
+
+        carousel.scrollTo({ left: 0, behavior: "instant" });
+        requestAnimationFrame(updateControls);
+      });
+    });
+
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(updateControls).observe(carousel);
+    } else {
+      window.addEventListener("resize", updateControls);
+    }
+
+    updateControls();
+  </script>
+</body>
+</html>
